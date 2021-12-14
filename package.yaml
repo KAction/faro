@@ -1,0 +1,35 @@
+name: faro
+version: 0.0.1.0
+synopsis: Linter for nixpkgs
+description: See README at https://git.sr.ht/~kaction/faro
+author: Dmitry Bogatov
+category: Distribution
+license: BSD-3-Clause
+
+dependencies:
+  - base
+  - optparse-applicative
+  - hnix
+  - mtl
+  - recursion-schemes
+
+executables:
+  faro:
+    main: Main.hs
+    dependencies:
+      - base
+      - faro
+
+library:
+  source-dirs: src
+
+tests:
+  faro-test:
+    source-dirs: test
+    main: Main.hs
+    ghc-options:
+      - -Wall
+      - -threaded
+    dependencies:
+      - faro
+      - hedgehog

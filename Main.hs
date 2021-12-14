@@ -1,0 +1,1 @@
+import Faro.Main (main)
