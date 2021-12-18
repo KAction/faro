@@ -1,1 +1,1 @@
-import Faro.Main (main)
+import Faro (main)
