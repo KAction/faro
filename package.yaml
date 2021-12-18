@@ -8,10 +8,13 @@ license: BSD-3-Clause
 
 dependencies:
   - base
-  - optparse-applicative
+  - containers
+  - data-fix
   - hnix
   - mtl
-  - recursion-schemes
+  - optparse-applicative
+  - text
+  - prettyprinter
 
 executables:
   faro:
