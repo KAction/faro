@@ -6,7 +6,7 @@
 module Faro (main) where
 
 import Control.Monad (forM_)
-import Data.Fix (Fix (..), foldFix)
+import Data.Fix.Extended (Fix (..), foldFix, para)
 import Data.List.NonEmpty (NonEmpty (..))
 import Data.Monoid (First (First), getFirst)
 import Data.Set (Set)
@@ -130,27 +130,24 @@ posOf name =
    in getFirst . foldMap (First . match)
 
 checkNameAndVersion :: NExprLoc -> Set Warning
-checkNameAndVersion x = warnings $ fst $ foldFix fn x
+checkNameAndVersion x = warnings $ para fn x
   where
-    fn :: NExprLocF (Acc, NExprLoc) -> (Acc, NExprLoc)
+    fn :: NExprLocF (NExprLoc, Acc) -> Acc
     fn expr =
       let w :: Set Warning
-          w = foldMap id $ fmap (warnings . fst) expr
-
-          orig :: NExprLoc
-          orig = Fix $ fmap snd expr
+          w = foldMap id $ fmap (warnings . snd) expr
        in case expr of
-            NSet_ _ _ binders -> (Acc w pending, orig)
+            NSet_ _ _ binders -> Acc w pending
               where
                 binders'1 :: [Binding NExprLoc]
-                binders'1 = map (fmap snd) binders
+                binders'1 = map (fmap fst) binders
 
                 namePos, versionPos :: Maybe SourcePos
                 namePos = posOf "name" binders'1
                 versionPos = posOf "version" binders'1
 
                 pending = (,) <$> namePos <*> versionPos
-            NBinary_ _ NApp (af, f) (ae, e) -> (Acc w' Nothing, orig)
+            NBinary_ _ NApp (f, af) (e, ae) -> Acc w' Nothing
               where
                 w' :: Set Warning
                 w' = maybe id Set.insert wnew w
@@ -179,7 +176,7 @@ checkNameAndVersion x = warnings $ fst $ foldFix fn x
                             npos
                             vpos
                     _ -> Nothing
-            _ -> (Acc w Nothing, orig)
+            _ -> Acc w Nothing
 
 --extractArgs :: NExpr -> [NExpr]
 --extractArgs x = fst $ foldFix fn x
@@ -192,6 +189,7 @@ checkNameAndVersion x = warnings $ fst $ foldFix fn x
 --          (e : (af ++ ae), EBinary NApp f e)
 --        _ -> (foldMap fst expr, Fix $ fmap snd expr)
 --      expr -> (foldMap fst expr, Fix $ fmap snd expr)
+
 
 main :: IO ()
 main = do
