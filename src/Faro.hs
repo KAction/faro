@@ -5,6 +5,7 @@
 
 module Faro (main) where
 
+import Data.Foldable (Foldable(fold))
 import Control.Monad (forM_)
 import Data.Fix.Extended (Fix (..), foldFix, para)
 import Data.List.NonEmpty (NonEmpty (..))
@@ -135,7 +136,7 @@ checkNameAndVersion x = warnings $ para fn x
     fn :: NExprLocF (NExprLoc, Acc) -> Acc
     fn expr =
       let w :: Set Warning
-          w = foldMap id $ fmap (warnings . snd) expr
+          w = fold $ fmap (warnings . snd) expr
        in case expr of
             NSet_ _ _ binders -> Acc w pending
               where
