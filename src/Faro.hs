@@ -178,18 +178,6 @@ checkNameAndVersion x = warnings $ para fn x
                     _ -> Nothing
             _ -> Acc w Nothing
 
---extractArgs :: NExpr -> [NExpr]
---extractArgs x = fst $ foldFix fn x
---  where
---    fn :: NExprF ([(Text, NExpr)], NExpr) -> ([(Text, NExpr)], NExpr)
---    fn = \case
---      expr@(NBinary NApp (af, f) (ae, e)) -> case f of
---        ESym "mkDerivation" -> (e : (af ++ ae), EBinary NApp f e)
---        ESelect _ (AttrL "mkDerivation") Nothing ->
---          (e : (af ++ ae), EBinary NApp f e)
---        _ -> (foldMap fst expr, Fix $ fmap snd expr)
---      expr -> (foldMap fst expr, Fix $ fmap snd expr)
-
 
 main :: IO ()
 main = do
