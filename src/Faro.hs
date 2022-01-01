@@ -6,37 +6,9 @@
 module Faro (main) where
 
 import Control.Monad (forM_)
-import Data.Fix.Extended (Fix (..), foldFix, para)
-import Data.Foldable (Foldable (fold))
-import Data.List.NonEmpty (NonEmpty (..))
-import Data.Monoid (First (First), getFirst)
-import Data.Set (Set)
-import qualified Data.Set as Set
-import Data.Text (Text)
 import Faro.Check.Expr.NameAndVersion (check)
-import Faro.Types (Warning, details, subject)
-import Nix.Expr.Types
-  ( Binding (NamedVar),
-    NBinaryOp (NApp),
-    NExpr,
-    NExprF (NBinary, NSelect, NSym),
-    NKeyName (StaticKey),
-  )
-import Nix.Expr.Types.Annotated
-  ( NExprLoc,
-    NExprLocF,
-    SourcePos,
-    sourceColumn,
-    sourceLine,
-    sourceName,
-    spanBegin,
-    unPos,
-    pattern NBinary_,
-    pattern NSelect_,
-    pattern NSet_,
-    pattern NSym_,
-  )
-import Nix.Parser (parseNixFile, parseNixFileLoc)
+import Faro.Types (details, subject)
+import Nix.Parser (parseNixFileLoc)
 import Options.Applicative
   ( Parser,
     execParser,
@@ -50,7 +22,7 @@ import Options.Applicative
     strOption,
     (<**>),
   )
-import Prettyprinter (Doc, Pretty (pretty), hardline, nest)
+import Prettyprinter (nest)
 import Prettyprinter.Util (putDocW)
 import System.Exit (exitFailure)
 

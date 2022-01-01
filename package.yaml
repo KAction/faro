@@ -6,16 +6,6 @@ author: Dmitry Bogatov
 category: Distribution
 license: BSD-3-Clause
 
-dependencies:
-  - base
-  - containers
-  - data-fix
-  - hnix
-  - mtl
-  - optparse-applicative
-  - text
-  - prettyprinter
-
 executables:
   faro:
     main: Main.hs
@@ -25,6 +15,20 @@ executables:
 
 library:
   source-dirs: src
+  ghc-options:
+    - -Werror
+    - -Wunused-binds
+    - -Wunused-imports
+    - -Wunused-foralls
+  dependencies:
+    - base
+    - containers
+    - data-fix
+    - hnix
+    - mtl
+    - optparse-applicative
+    - text
+    - prettyprinter
 
 tests:
   faro-test:

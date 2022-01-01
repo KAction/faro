@@ -4,7 +4,7 @@
 
 module Faro.Check.Expr.NameAndVersion (check, xcheck, XWarning) where
 
-import Data.Fix.Extended (Fix (Fix), para, unFix)
+import Data.Fix.Extended (para, unFix)
 import Data.List.NonEmpty (NonEmpty ((:|)))
 import Data.Monoid (First (First), getFirst)
 import Data.Set (Set)
@@ -15,7 +15,6 @@ import Faro.Types (Warning (..))
 import Nix.Expr.Types
   ( Binding (NamedVar),
     NBinaryOp (NApp),
-    NExprF (NBinary, NSelect, NSym),
     NKeyName (StaticKey),
   )
 import Nix.Expr.Types.Annotated
@@ -23,24 +22,17 @@ import Nix.Expr.Types.Annotated
     NExprLocF,
     SourcePos,
     spanBegin,
-    spanEnd,
     pattern NBinary_,
     pattern NSelect_,
     pattern NSet_,
     pattern NSym_,
   )
-import Prettyprinter (Doc, Pretty (pretty), hardline, nest)
+import Prettyprinter (Pretty (pretty), hardline)
 
 data Acc = Acc
   { warnings :: Set XWarning,
     pending :: Maybe (SourcePos, SourcePos) -- (name, version)
   }
-
-pattern ESym a = Fix (NSym a)
-
-pattern ESelect a b c = Fix (NSelect a b c)
-
-pattern EBinary a b c = Fix (NBinary a b c)
 
 pattern AttrL a = StaticKey a :| []
 
