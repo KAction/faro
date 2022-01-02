@@ -38,5 +38,6 @@ tests:
       - -Wall
       - -threaded
     dependencies:
+      - base
       - faro
       - hedgehog
